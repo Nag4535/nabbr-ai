@@ -952,7 +952,7 @@ def page_agents():
 def page_dashboard():
     st.markdown('<div class="section-title">📊 INTERACTIVE DASHBOARD</div>', unsafe_allow_html=True)
 
-    df = st.session_state.cleaned_df or st.session_state.df
+    df = st.session_state.cleaned_df if st.session_state.cleaned_df is not None else st.session_state.df
     if df is None:
         st.warning("Please upload a dataset first.")
         return
@@ -1097,7 +1097,7 @@ def page_dashboard():
 def page_ml():
     st.markdown('<div class="section-title">🧠 ML PIPELINE</div>', unsafe_allow_html=True)
 
-    df = st.session_state.cleaned_df or st.session_state.df
+    df = st.session_state.cleaned_df if st.session_state.cleaned_df is not None else st.session_state.df
     if df is None:
         st.warning("Please upload a dataset first.")
         return
@@ -1198,7 +1198,7 @@ def page_ml():
 def page_reports():
     st.markdown('<div class="section-title">📄 REPORT GENERATOR</div>', unsafe_allow_html=True)
 
-    df = st.session_state.cleaned_df or st.session_state.df
+    df = st.session_state.cleaned_df if st.session_state.cleaned_df is not None else st.session_state.df
     if df is None:
         st.warning("Please upload a dataset first.")
         return
