@@ -15,7 +15,7 @@ from supabase import create_client, Client
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 SUPABASE_URL = "https://ujqhwlntfwezubuvgzeq.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqcWh3bG50ZndlenVidXZnemVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODM0MTYsImV4cCI6MjA5NDI1OTQxNn0.Xwzub563z2FLA9PhFNqq-7Gu2xuscmd0xedcaQNb7js"
-GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY", ""))
+GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 
 st.set_page_config(
@@ -183,15 +183,22 @@ def ask_groq(system: str, user: str, max_tokens: int = 1024) -> str:
 
 # ── DATA HELPERS ──────────────────────────────────────────────────────────────
 def load_file(file) -> pd.DataFrame:
+    import warnings
     name = file.name.lower()
-    if name.endswith(".csv"):
-        return pd.read_csv(file)
-    elif name.endswith((".xlsx", ".xls")):
-        return pd.read_excel(file)
-    elif name.endswith(".json"):
-        return pd.read_json(file)
-    else:
-        st.error("Unsupported file type. Please upload CSV, Excel, or JSON.")
+    try:
+        if name.endswith(".csv"):
+            return pd.read_csv(file, encoding="utf-8", on_bad_lines="skip")
+        elif name.endswith((".xlsx", ".xls")):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                return pd.read_excel(file, engine="openpyxl")
+        elif name.endswith(".json"):
+            return pd.read_json(file)
+        else:
+            st.error("Unsupported file type. Please upload CSV, Excel, or JSON.")
+            return None
+    except Exception as e:
+        st.error(f"Error loading file: {e}")
         return None
 
 def auto_clean(df: pd.DataFrame) -> tuple:
@@ -339,7 +346,6 @@ def run_ml_pipeline(df: pd.DataFrame, target_col: str, task: str) -> dict:
     le_dict = {}
     for col in X.select_dtypes(include=["object", "category"]).columns:
         le = LabelEncoder()
-        X = X.copy()
         X[col] = le.fit_transform(X[col].astype(str))
         le_dict[col] = le
 
