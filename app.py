@@ -15,7 +15,7 @@ from supabase import create_client, Client
 # ── CONFIG ────────────────────────────────────────────────────────────────────
 SUPABASE_URL = "https://ujqhwlntfwezubuvgzeq.supabase.co"
 SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InVqcWh3bG50ZndlenVidXZnemVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg2ODM0MTYsImV4cCI6MjA5NDI1OTQxNn0.Xwzub563z2FLA9PhFNqq-7Gu2xuscmd0xedcaQNb7js"
-GROQ_API_KEY = os.environ.get("GROQ_API_KEY", "")
+GROQ_API_KEY = st.secrets.get("GROQ_API_KEY", os.environ.get("GROQ_API_KEY", ""))
 GROQ_MODEL   = "llama-3.3-70b-versatile"
 
 st.set_page_config(
