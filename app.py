@@ -1059,7 +1059,7 @@ def page_dashboard():
                 ts = df.set_index(dt_col)[num_col].resample(freq).sum().reset_index()
                 fig = px.line(ts, x=dt_col, y=num_col, title=f"{num_col} over Time",
                               color_discrete_sequence=["#00D4AA"])
-                fig.update_traces(fill="tozeroy", fillcolor="#00D4AA15")
+                fig.update_traces(fill="tozeroy", fillcolor="rgba(0,212,170,0.08)")
                 st.plotly_chart(style_fig(fig), use_container_width=True)
             else:
                 st.info("No datetime columns detected. Parse date columns in the clean step.")
