@@ -335,7 +335,7 @@ def run_ml_pipeline(df: pd.DataFrame, target_col: str, task: str) -> dict:
     from sklearn.impute import SimpleImputer
 
     results = {}
-    df_ml = df.copy()
+    df_ml = df.copy()       
 
     # Prepare features
     feature_cols = [c for c in df_ml.columns if c != target_col]
@@ -344,6 +344,7 @@ def run_ml_pipeline(df: pd.DataFrame, target_col: str, task: str) -> dict:
 
     # Encode categoricals
     le_dict = {}
+    X = X.copy()
     for col in X.select_dtypes(include=["object", "category"]).columns:
         le = LabelEncoder()
         X[col] = le.fit_transform(X[col].astype(str))
