@@ -339,6 +339,7 @@ def run_ml_pipeline(df: pd.DataFrame, target_col: str, task: str) -> dict:
     le_dict = {}
     for col in X.select_dtypes(include=["object", "category"]).columns:
         le = LabelEncoder()
+        X = X.copy()
         X[col] = le.fit_transform(X[col].astype(str))
         le_dict[col] = le
 
