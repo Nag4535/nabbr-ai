@@ -880,7 +880,7 @@ def page_upload():
 def page_agents():
     st.markdown('<div class="section-title">🤖 AI AGENT ANALYSIS</div>', unsafe_allow_html=True)
 
-    df = st.session_state.cleaned_df if 
+    df = st.session_state.cleaned_df if st.session_state.cleaned_df is not None else st.session_state.df 
     st.session_state.cleaned_df is not None else 
     st.session_state.df
     if df is None:
